@@ -174,9 +174,19 @@ function format_dm(user_ids_string, unread_count, latest_msg_id) {
         is_hidden: filter_should_hide_row({dm_key: user_ids_string}),
         is_collapsed: collapsed_containers.has("inbox-dm-header"),
         latest_msg_id,
+        mention_in_unread: unread.message_has_mention(latest_msg_id)
     };
 
     return context;
+}
+
+function checkLatestMsgIds(unread_dms_dict){
+    for (const [key, { count, latest_msg_id }] of unread_dms_dict) {
+        if (unread.message_has_mention(latest_msg_id)) {
+            return true; // Return true if any latest_msg_id returns true from message_has_mention
+        }
+    }
+    return false; // Return false if none of the latest_msg_ids return true from message_has_mention
 }
 
 function insert_dms(keys_to_insert) {
@@ -298,6 +308,8 @@ function format_topic(stream_id, topic, topic_unread_count, latest_msg_id) {
 
     return context;
 }
+
+
 
 function insert_stream(stream_id, topic_dict) {
     const stream_key = get_stream_key(stream_id);
@@ -1013,7 +1025,10 @@ export function update() {
         $inbox_dm_header.addClass("hidden_by_filters");
     } else {
         $inbox_dm_header.removeClass("hidden_by_filters");
-        $inbox_dm_header.find(".unread_count").text(unread_dms_count);
+	const result = checkLatestMsgIds(unread_dms_dict);
+	$inbox_dm_header.find(".unread_mention_info").text(result ? '@': '');
+	$inbox_dm_header.find(".unread_count").text(unread_dms_count);
+
     }
 
     let has_topics_post_filter = false;

@@ -864,11 +864,11 @@ LOGGING: Dict[str, Any] = {
             "propagate": False,
         },
         ## Uncomment the following to get all database queries logged to the console
-        # 'django.db': {
-        #     'level': 'DEBUG',
-        #     'handlers': ['console'],
-        #     'propagate': False,
-        # },
+        ##'django.db': {
+        ##    'level': 'DEBUG',
+        ##    'handlers': ['console'],
+        ##    'propagate': False,
+        ##},
         # other libraries, alphabetized
         "django_auth_ldap": {
             "level": "DEBUG",

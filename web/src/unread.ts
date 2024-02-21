@@ -999,6 +999,10 @@ export function get_msg_ids_for_starred(): number[] {
     return [];
 }
 
+export function message_has_mention(message_id: number): boolean {
+    return direct_message_with_mention_count.has(message_id);
+}
+
 type UnreadStreamInfo = {
     stream_id: number;
     topic: string;

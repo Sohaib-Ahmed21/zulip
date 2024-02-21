@@ -532,6 +532,7 @@ function format_conversation(conversation_data) {
     } else if (type === "private") {
         // Direct message info
         context.user_ids_string = last_msg.to_user_ids;
+        context.mention_in_unread= unread.message_has_mention(conversation_data.last_msg_id)
         context.rendered_pm_with = last_msg.display_recipient
             .filter(
                 (recipient) =>

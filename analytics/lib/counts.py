@@ -355,6 +355,7 @@ def do_increment_logging_stat(
         row.save(update_fields=["value"])
 
 
+
 def do_drop_all_analytics_tables() -> None:
     UserCount.objects.all().delete()
     StreamCount.objects.all().delete()
