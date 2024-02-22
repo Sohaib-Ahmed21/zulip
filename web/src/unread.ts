@@ -134,6 +134,17 @@ class UnreadDirectMessageCounter {
             pm_dict,
         };
     }
+    
+    check_for_mention(user_id_string: string): boolean {
+    const bucket= get_msg_ids_for_user_ids_string(user_id_string);
+    for (const id of bucket) {
+        if (message_has_mention(id)) {
+            return true; // Return true if any message has a mention
+        }
+    }
+    
+    return false; // Return false if none of the messages have mentions
+}
 
     num_unread(user_ids_string: string): number {
         if (!user_ids_string) {
@@ -956,6 +967,10 @@ export function num_unread_for_user_ids_string(user_ids_string: string): number 
     return unread_direct_message_counter.num_unread(user_ids_string);
 }
 
+export function get_msg_ids_for_dms():number[] {
+    return unread_direct_message_counter.get_msg_ids()
+}
+
 export function get_msg_ids_for_stream(stream_id: number): number[] {
     return unread_topic_counter.get_msg_ids_for_stream(stream_id);
 }
@@ -1003,6 +1018,10 @@ export function message_has_mention(message_id: number): boolean {
     return direct_message_with_mention_count.has(message_id);
 }
 
+export function check_mentions_for_user(user_id_string: string): boolean {
+        return unread_direct_message_counter.check_for_mention(user_id_string);
+    }
+
 type UnreadStreamInfo = {
     stream_id: number;
     topic: string;
@@ -1034,7 +1053,6 @@ type UnreadMessagesParams = {
 
 export function initialize(params: UnreadMessagesParams): void {
     const unread_msgs = params.unread_msgs;
-
     old_unreads_missing = unread_msgs.old_unreads_missing;
     unread_direct_message_counter.set_huddles(unread_msgs.huddles);
     unread_direct_message_counter.set_pms(unread_msgs.pms);

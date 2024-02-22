@@ -138,6 +138,15 @@ const ALL_MESSAGES_LOADED = 3;
 let loading_state = NO_MESSAGES_LOADED;
 let oldest_message_timestamp = Number.POSITIVE_INFINITY;
 
+function dms_has_mention(msg_ids){
+    for (const msg_id of msg_ids) {
+        if (unread.message_has_mention(msg_id)) {
+            return true; // Return true if any latest_msg_id returns true from message_has_mention
+        }
+    }
+    return false; // Return false if none of the latest_msg_ids return true from message_has_mention
+}
+
 export function set_oldest_message_date(msg_list_data) {
     const has_found_oldest = msg_list_data.fetch_status.has_found_oldest();
     const has_found_newest = msg_list_data.fetch_status.has_found_newest();
@@ -532,7 +541,7 @@ function format_conversation(conversation_data) {
     } else if (type === "private") {
         // Direct message info
         context.user_ids_string = last_msg.to_user_ids;
-        context.mention_in_unread= unread.message_has_mention(conversation_data.last_msg_id)
+        context.mention_in_unread= dms_has_mention(unread.get_msg_ids_for_user_ids_string(context.user_ids_string));
         context.rendered_pm_with = last_msg.display_recipient
             .filter(
                 (recipient) =>
