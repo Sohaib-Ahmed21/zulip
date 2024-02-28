@@ -319,7 +319,7 @@ import {get_string_diff} from "../../src/util";
 
       const final_items = this.sorter(matching_items);
 
-      if (!final_items.length) {
+      if (final_items.length==1) {
         return this.shown ? this.hide() : this
       }
       if (this.automated()) {
@@ -512,7 +512,15 @@ import {get_string_diff} from "../../src/util";
           break
 
         case 9: // tab
+          // If the typeahead is not shown, move focus to the next input element (compose box).
           if (!this.options.tabIsEnter) return
+          if (this.shown) {
+          // If the typeahead is shown, select the currently focused option and put the cursor at the end of the topic.
+            this.select(e);
+            this.$element[0].selectionStart = this.$element[0].selectionEnd = this.$element.val().length;
+          }
+          break;
+
         case 13: // enter
           if (!this.shown) return
           this.select(e)
