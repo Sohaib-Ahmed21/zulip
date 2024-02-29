@@ -6702,8 +6702,8 @@ class TestRemoteRealmBillingFlow(StripeTestCase, RemoteRealmBillingTestCase):
             "Annual",
             "March 2, 2013",
             "This is a fixed-price plan",
-            "Your plan will automatically renew on",
-            f"${annual_fixed_price:,.2f}",
+            "Your plan ends on <strong>March 2, 2013</strong>",
+            "You will be contacted by Zulip Sales",
             "Visa ending in 4242",
             "Update card",
         ]:
@@ -6985,7 +6985,7 @@ class TestRemoteRealmBillingFlow(StripeTestCase, RemoteRealmBillingTestCase):
         self.assertEqual(self.email_envelope_from(message), settings.NOREPLY_EMAIL_ADDRESS)
         self.assertIn("Zulip sponsorship request <noreply-", self.email_display_from(message))
         self.assertIn(
-            "Support URL: http://zulip.testserver/activity/remote/support?q=demo.example.com",
+            f"Support URL: http://zulip.testserver/activity/remote/support?q={remote_realm.uuid!s}",
             message.body,
         )
         self.assertIn("Website: https://infinispan.org", message.body)
@@ -7596,7 +7596,7 @@ class TestRemoteServerBillingFlow(StripeTestCase, RemoteServerTestCase):
         self.assertEqual(self.email_envelope_from(message), settings.NOREPLY_EMAIL_ADDRESS)
         self.assertIn("Zulip sponsorship request <noreply-", self.email_display_from(message))
         self.assertIn(
-            "Support URL: http://zulip.testserver/activity/remote/support?q=demo.example.com",
+            f"Support URL: http://zulip.testserver/activity/remote/support?q={self.remote_server.uuid!s}",
             message.body,
         )
         self.assertIn("Website: https://infinispan.org", message.body)
@@ -8397,8 +8397,8 @@ class TestRemoteServerBillingFlow(StripeTestCase, RemoteServerTestCase):
             "Annual",
             "March 2, 2013",
             "This is a fixed-price plan",
-            "Your plan will automatically renew on",
-            f"${annual_fixed_price:,.2f}",
+            "Your plan ends on <strong>March 2, 2013</strong>",
+            "You will be contacted by Zulip Sales",
             "Visa ending in 4242",
             "Update card",
         ]:

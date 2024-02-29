@@ -2164,6 +2164,8 @@ class BillingSession(ABC):
         last_ledger_entry: LicenseLedger,
     ) -> int:
         if plan.fixed_price is not None:
+            if plan.end_date == self.get_next_billing_cycle(plan):
+                return 0
             return get_amount_due_fixed_price_plan(plan.fixed_price, plan.billing_schedule)
         if last_ledger_entry.licenses_at_next_renewal is None:
             return 0  # nocoverage
@@ -2275,7 +2277,7 @@ class BillingSession(ABC):
             "licenses_at_next_renewal": licenses_at_next_renewal,
             "seat_count": seat_count,
             "renewal_date": renewal_date,
-            "renewal_amount": cents_to_dollar_string(renewal_cents),
+            "renewal_amount": cents_to_dollar_string(renewal_cents) if renewal_cents != 0 else None,
             "payment_method": payment_method,
             "charge_automatically": charge_automatically,
             "stripe_email": stripe_email,
@@ -3779,7 +3781,7 @@ class RemoteRealmBillingSession(BillingSession):
 
     @override
     def support_url(self) -> str:  # nocoverage
-        return build_support_url("remote_servers_support", self.remote_realm.server.hostname)
+        return build_support_url("remote_servers_support", str(self.remote_realm.uuid))
 
     @override
     def get_customer(self) -> Optional[Customer]:
@@ -4210,7 +4212,7 @@ class RemoteServerBillingSession(BillingSession):
 
     @override
     def support_url(self) -> str:  # nocoverage
-        return build_support_url("remote_servers_support", self.remote_server.hostname)
+        return build_support_url("remote_servers_support", str(self.remote_server.uuid))
 
     @override
     def get_customer(self) -> Optional[Customer]:

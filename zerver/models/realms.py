@@ -242,7 +242,7 @@ class Realm(models.Model):  # type: ignore[django-manager-missing] # django-stub
     create_web_public_stream_policy = models.PositiveSmallIntegerField(default=POLICY_OWNERS_ONLY)
 
     # Who in the organization is allowed to delete messages they themselves sent.
-    delete_own_message_policy = models.PositiveSmallIntegerField(default=POLICY_ADMINS_ONLY)
+    delete_own_message_policy = models.PositiveSmallIntegerField(default=POLICY_EVERYONE)
 
     # Who in the organization is allowed to edit topics of any message.
     edit_topic_policy = models.PositiveSmallIntegerField(default=POLICY_EVERYONE)
@@ -268,7 +268,7 @@ class Realm(models.Model):  # type: ignore[django-manager-missing] # django-stub
 
     # Who in the organization is allowed to move messages between streams.
     move_messages_between_streams_policy = models.PositiveSmallIntegerField(
-        default=POLICY_ADMINS_ONLY
+        default=POLICY_MEMBERS_ONLY
     )
 
     user_group_edit_policy = models.PositiveSmallIntegerField(default=POLICY_MEMBERS_ONLY)
