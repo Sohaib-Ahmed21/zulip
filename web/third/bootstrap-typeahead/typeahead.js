@@ -319,7 +319,7 @@ import {get_string_diff} from "../../src/util";
 
       const final_items = this.sorter(matching_items);
 
-      if (final_items.length==1) {
+      if (!final_items.length) {
         return this.shown ? this.hide() : this
       }
       if (this.automated()) {
@@ -520,7 +520,6 @@ import {get_string_diff} from "../../src/util";
             this.$element[0].selectionStart = this.$element[0].selectionEnd = this.$element.val().length;
           }
           break;
-
         case 13: // enter
           if (!this.shown) return
           this.select(e)
