@@ -76,16 +76,30 @@ export function update_dom_with_unread_counts(
 // TODO: Rewrite how we handle activation of narrows when doing the redesign.
 // We don't want to adjust class for all the buttons when switching narrows.
 
-function remove($elem: JQuery): void {
+function deactivate_narrow($elem: JQuery): void {
     $elem.removeClass("active-filter active-sub-filter");
 }
 
-function deselect_top_left_corner_items(): void {
-    remove($(".top_left_all_messages"));
-    remove($(".top_left_starred_messages"));
-    remove($(".top_left_mentions"));
-    remove($(".top_left_recent_view"));
-    remove($(".top_left_inbox"));
+/**
+ * Deselects narrows in the top left corner, excluding the specified narrow if provided.
+ * If no narrow is provided, deselects all narrows.
+ * @param excluded_narrow The narrow to exclude from deselection.
+ */
+function deselect_top_left_corner_items(excluded_narrow = ""): void {
+    const narrows = [
+        ".top_left_all_messages",
+        ".top_left_starred_messages",
+        ".top_left_mentions",
+        ".top_left_recent_view",
+        ".top_left_inbox",
+    ];
+
+    // Filter out the excluded narrow and join the remaining selectors
+    const narrows_to_deactivate = narrows
+        .filter((selector) => selector !== excluded_narrow)
+        .join(",");
+
+    deactivate_narrow($(narrows_to_deactivate));
 }
 
 export function handle_narrow_activated(filter: Filter): void {
@@ -108,9 +122,11 @@ export function handle_narrow_activated(filter: Filter): void {
         filter_name = ops[0];
         if (filter_name === "starred") {
             $filter_li = $(".top_left_starred_messages");
+            deselect_top_left_corner_items(".top_left_starred_messages");
             $filter_li.addClass("active-filter");
         } else if (filter_name === "mentioned") {
             $filter_li = $(".top_left_mentions");
+            deselect_top_left_corner_items(".top_left_mentions");
             $filter_li.addClass("active-filter");
         }
     }
@@ -158,7 +174,7 @@ function do_new_messages_animation($li: JQuery): void {
 }
 
 export function highlight_inbox_view(): void {
-    deselect_top_left_corner_items();
+    deselect_top_left_corner_items(".top_left_inbox");
 
     $(".top_left_inbox").addClass("active-filter");
     setTimeout(() => {
@@ -167,7 +183,7 @@ export function highlight_inbox_view(): void {
 }
 
 export function highlight_recent_view(): void {
-    deselect_top_left_corner_items();
+    deselect_top_left_corner_items(".top_left_recent_view");
 
     $(".top_left_recent_view").addClass("active-filter");
     setTimeout(() => {
@@ -176,7 +192,7 @@ export function highlight_recent_view(): void {
 }
 
 export function highlight_all_messages_view(): void {
-    deselect_top_left_corner_items();
+    deselect_top_left_corner_items(".top_left_all_messages");
 
     $(".top_left_all_messages").addClass("active-filter");
     setTimeout(() => {
