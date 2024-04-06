@@ -154,7 +154,7 @@
 
         #recent_view_filter_buttons {
             padding-top: 12px;
-            margin: 0 10px;
+            margin: 0 40px 0 10px;
             display: flex;
             /* Search box has no height without this in safari. */
             flex: 0 0 auto;
@@ -166,25 +166,27 @@
             display: flex;
             flex-grow: 1;
             margin: 0 -27px 10px 0;
+            position: relative;
         }
 
         #recent_view_search_clear {
-            visibility: hidden;
-        }
+display: none;
+position: absolute; 
+right: -5px;
+}
 
         #recent_view_search {
             flex-grow: 1;
             padding-right: 20px;
             white-space: nowrap;
             text-overflow: ellipsis;
-            overflow: hidden;
+            overflow: hidden; 
         }
 
         .clear_search_button {
             /* Overrides app_components.css property. */
-            padding-top: 4px !important;
+            padding-top: 7px !important;
         }
-
         .btn-recent-filters {
             border-radius: 40px;
             margin: 0 5px 10px 0;

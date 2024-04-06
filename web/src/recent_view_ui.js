@@ -1555,16 +1555,16 @@ export function initialize({
 
     $("body").on("input", "#recent_view_search", () => {
         if ($("#recent_view_search").val()) {
-            $("#recent_view_search_clear").css("visibility", "visible");
+            $("#recent_view_search_clear").css("display", "block");
         } else {
-            $("#recent_view_search_clear").css("visibility", "hidden");
+            $("#recent_view_search_clear").css("display", "none");
         }
     });
 
     $("body").on("click", "#recent_view_search_clear", (e) => {
         e.stopPropagation();
         $("#recent_view_search").val("");
-        $("#recent_view_search_clear").css("visibility", "hidden");
+        $("#recent_view_search_clear").css("display", "none");
         update_filters_view();
     });
 

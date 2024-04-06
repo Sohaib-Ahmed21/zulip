@@ -602,7 +602,7 @@ export function setup_page(callback) {
         $(".display-type #stream_settings_title").show();
 
         if (!$("#search_stream_name").val()) {
-            $("#clear_search_stream_name").css("visibility", "hidden");
+            $("#clear_search_stream_name").hide();
         }
     }
 
@@ -654,9 +654,9 @@ export function setup_page(callback) {
         const throttled_redraw_left_panel = _.throttle(redraw_left_panel, 50);
         $("#search_stream_name").on("input", () => {
             if (!$("#search_stream_name").val()) {
-                $("#clear_search_stream_name").css("visibility", "hidden");
+                $("#clear_search_stream_name").hide();
             } else {
-                $("#clear_search_stream_name").css("visibility", "visible");
+                $("#clear_search_stream_name").show();
             }
             // Debounce filtering in case a user is typing quickly
             throttled_redraw_left_panel();
@@ -687,7 +687,7 @@ export function setup_page(callback) {
 
         $("#clear_search_stream_name").on("click", () => {
             $("#search_stream_name").val("");
-            $("#clear_search_stream_name").css("visibility", "hidden");
+            $("#clear_search_stream_name").hide();
             redraw_left_panel();
         });
 

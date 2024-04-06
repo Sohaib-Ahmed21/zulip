@@ -475,6 +475,7 @@ h4.user_group_setting_subsection_title {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+    flex-grow: 1;
 }
 
 .stream_name_search_section,
@@ -488,6 +489,11 @@ h4.user_group_setting_subsection_title {
     border-bottom: 1px solid hsl(0deg 0% 87%);
 }
 
+.stream_name_search_section{
+    width: 96%;
+    position: relative;
+}
+
 .user-groups-list,
 .streams-list {
     position: relative;
@@ -497,7 +503,14 @@ h4.user_group_setting_subsection_title {
     width: 100%;
 }
 
-#clear_search_stream_name,
+#clear_search_stream_name{
+    position: absolute;
+    padding-top: 14px;
+    right: -20px;
+    /* background-color: blue; */
+
+}
+
 #clear_search_group_name {
     right: 5px !important;
     margin-left: -1px;
