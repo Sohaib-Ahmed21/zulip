@@ -43,6 +43,7 @@ import {user_settings} from "./user_settings";
 import * as user_status from "./user_status";
 import * as user_topics from "./user_topics";
 import * as views_util from "./views_util";
+import { update } from "lodash";
 
 let topics_widget;
 let filters_dropdown_widget;
@@ -1596,4 +1597,48 @@ export function initialize({
             revive_current_focus();
         }
     });
+}
+
+// $(document).ready(function() {
+//     // Listen for changes to client_is_active
+//     $(document).on('clientIsActiveChanged', function(event, isActive) {
+//         // Get the new value of the variable from the event detail
+//         const newValue = event.detail;
+//         // Check if the variable is true
+//         if (newValue === true) {
+//             // Call the render function
+//             render();
+//         }
+//     });
+// });
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Listen for changes to client_is_active
+    $(document).on('clientActivityUpdated', (event) => {
+        if (event.detail === true) {
+            render(); // Call the render function when client_is_active becomes true
+        }
+    });
+});
+
+
+// Function to run when client_is_active evaluates to true
+function render() {
+    // Since we render relative time in recent view, it needs to be
+    // updated otherwise it will show stale time. But, we don't want
+    // to update it every minute due to performance reasons. So, we
+    // only update it when the user comes back from idle which has
+    // maximum chance of user seeing incorrect rendered time.
+    for (const conversation_data of topics_widget.get_current_list()) {
+        const last_msg = message_store.get(conversation_data.last_msg_id);
+        const time = new Date(last_msg.timestamp * 1000);
+        const updated_time = timerender.relative_time_string_from_date(time);
+        console.log(updated_time);
+        const $row = get_topic_row(conversation_data);
+        const rendered_time = $row.find(".recent_topic_timestamp").text().trim();
+        if (updated_time === rendered_time) {
+            continue;
+        }
+        $row.find(".recent_topic_timestamp a").text(updated_time);
+    }
 }

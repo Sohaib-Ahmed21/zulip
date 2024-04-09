@@ -34,7 +34,7 @@ export enum ActivityState {
 */
 
 /* Broadcast "idle" to server after 5 minutes of local inactivity */
-const DEFAULT_IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+const DEFAULT_IDLE_TIMEOUT_MS = 5 * 1 * 1000;
 
 // When you open Zulip in a new browser window, client_is_active
 // should be true.  When a server-initiated reload happens, however,
@@ -152,6 +152,7 @@ export function mark_client_active(): void {
     // exported for testing
     if (!client_is_active) {
         client_is_active = true;
+        updateClientActivity(client_is_active);
         send_presence_to_server();
     }
 }
@@ -168,4 +169,11 @@ export function initialize(): void {
         onActive: mark_client_active,
         keepTracking: true,
     });
+}
+
+// Function to update the variable
+function updateClientActivity(newValue: boolean): void {
+    client_is_active = newValue;
+    // Trigger a custom event when the variable is updated
+    document.dispatchEvent(new CustomEvent('clientActivityUpdated', { detail: newValue }));
 }
